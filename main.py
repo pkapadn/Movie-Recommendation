@@ -21,6 +21,41 @@ if 'user_menu' not in st.session_state:
 
 def main():
     def initial_options():
+        st.markdown(
+            """
+            <style>
+            /* Custom styling specifically for tabs */
+            div[data-testid="stTabs"] button[data-baseweb="tab"] {
+                background-color: transparent; /* Make tab background transparent */
+                color: #0073e6;                /* Set text color */
+                border: none;                  /* Remove border */
+                border-radius: 0;              /* No rounded corners */
+                padding: 10px 20px;            /* Padding for spacing */
+                font-size: 16px;               /* Font size */
+                font-weight: normal;           /* Normal font weight */
+                cursor: pointer;               /* Pointer cursor on hover */
+                transition: color 0.3s;        /* Smooth text color transition */
+            }
+            div[data-testid="stTabs"] button[data-baseweb="tab"]:hover {
+                color: #005bb5;                /* Change text color on hover */
+            }
+            div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
+                color: #005bb5;                /* Active tab text color */
+                font-weight: bold;             /* Bold text for active tab */
+                border-bottom: 3px solid #005bb5; /* Custom underline for active tab */
+            }
+            div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"]:hover {
+                color: #003f7f;                /* Darker text color on hover for active tab */
+            }
+
+            /* Completely remove Streamlit's default tab underline */
+            div[data-testid="stTabs"] div[data-baseweb="tab-highlight"] {
+                background: none !important;  /* Remove the pink highlight line */
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
 
         st.subheader('Movie Recommendation System')
         # To display menu
@@ -99,15 +134,39 @@ def main():
             'Choose a movie...', new_df['title'].values
         )
         st.session_state.selected_movie_name = new_df['title'].values[0]
-        rec_button = st.button('Recommend')
-        if rec_button:
-            st.session_state.selected_movie_name = selected_movie_name
-            recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_tags.pkl',"are")
-            recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_genres.pkl',"on the basis of genres are")
-            recommendation_tags(new_df, selected_movie_name,
-                                r'Files/similarity_tags_tprduction_comp.pkl',"from the same production company are")
-            recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_keywords.pkl',"on the basis of keywords are")
-            recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_tcast.pkl',"on the basis of cast are")
+        # st.markdown(
+        #     """
+        #     <style>
+        #     /* Custom button styling */
+        #     .custom-button {
+        #         background-color: #0073e6; /* Background color */
+        #         color: white;             /* Text color */
+        #         border: none;             /* Remove border */
+        #         border-radius: 10px;      /* Rounded corners */
+        #         padding: 10px 20px;       /* Padding */
+        #         font-size: 16px;          /* Font size */
+        #         cursor: pointer;          /* Pointer cursor on hover */
+        #         transition: background-color 0.3s, transform 0.2s; /* Smooth transitions */
+        #     }
+        #     .custom-button:hover {
+        #         background-color: #005bb5; /* Darker background on hover */
+        #         transform: scale(1.05);    /* Slight zoom on hover */
+        #     }
+        #     </style>
+        #     """,
+        #     unsafe_allow_html=True
+        # )
+        # rec_button =  st.markdown('<button class="custom-button">Show Recommendation</button>', unsafe_allow_html=True)
+        # rec_button = st.button('Show Recommendation')
+        if selected_movie_name:
+            with st.spinner('Fetching recommendations...'):
+                st.session_state.selected_movie_name = selected_movie_name
+                recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_tags.pkl',"are")
+                recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_genres.pkl',"on the basis of genres are")
+                recommendation_tags(new_df, selected_movie_name,
+                                    r'Files/similarity_tags_tprduction_comp.pkl',"from the same production company are")
+                recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_keywords.pkl',"on the basis of keywords are")
+                recommendation_tags(new_df, selected_movie_name, r'Files/similarity_tags_tcast.pkl',"on the basis of cast are")
 
     def recommendation_tags(new_df, selected_movie_name, pickle_file_path,str):
 
@@ -278,52 +337,55 @@ def main():
                 st.text('\n')
                 st.image(info[0])
 
+        st.markdown(
+            """
+            <style>
+            .image-container {
+                border: 2px solid #4CAF50; /* Add a green border */
+                border-radius: 10px; /* Make the corners rounded */
+                overflow: hidden;
+                transition: transform 0.3s, box-shadow 0.3s; /* Smooth animation on hover */
+            }
+            .image-container:hover {
+                transform: scale(1.05); /* Slightly zoom the image on hover */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+            }
+            .cast-container {
+                background-color: #f4f4f4;
+                padding: 20px;
+                border-radius: 10px;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
             
-        # Displaying information of casts.
-        st.header('Cast')
+        st.header("Cast")
         cnt = 0
         urls = []
         bio = []
         for i in info[14]:
             if cnt == 5:
                 break
-            url, biography= preprocess.fetch_person_details(i)
+            url, biography = preprocess.fetch_person_details(i)
             urls.append(url)
             bio.append(biography)
             cnt += 1
 
+        # Define columns for layout
         col1, col2, col3, col4, col5 = st.columns(5)
-        with col1:
-            st.image(urls[0])
-            # Toggle button to show information of cast.
-            # stoggle(
-            #     "Show More",
-            #     bio[0],
-            # )
-        with col2:
-            st.image(urls[1])
-            # stoggle(
-            #     "Show More",
-            #     bio[1],
-            # )
-        with col3:
-            st.image(urls[2])
-            # stoggle(
-            #     "Show More",
-            #     bio[2],
-            # )
-        with col4:
-            st.image(urls[3])
-            # stoggle(
-            #     "Show More",
-            #     bio[3],
-            # )
-        with col5:
-            st.image(urls[4])
-            # stoggle(
-            #     "Show More",
-            #     bio[4],
-            # )
+
+        columns = [col1, col2, col3, col4, col5]
+        for idx, col in enumerate(columns):
+            with col:
+                # Add an image container for hover effect
+                st.markdown(f"""
+                <div class="image-container">
+                    <img src="{urls[idx]}" style="width: 100%; height: auto;" alt="Cast Member">
+                </div>
+                """, unsafe_allow_html=True)
+                
+               
 
     def paging_movies():
         max_pages = movies.shape[0] // 10
