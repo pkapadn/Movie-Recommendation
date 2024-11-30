@@ -26,26 +26,26 @@ def main():
             <style>
             /* Custom styling specifically for tabs */
             div[data-testid="stTabs"] button[data-baseweb="tab"] {
-                background-color: transparent; /* Make tab background transparent */
-                color: #0073e6;                /* Set text color */
-                border: none;                  /* Remove border */
-                border-radius: 0;              /* No rounded corners */
-                padding: 10px 20px;            /* Padding for spacing */
-                font-size: 16px;               /* Font size */
-                font-weight: normal;           /* Normal font weight */
-                cursor: pointer;               /* Pointer cursor on hover */
-                transition: color 0.3s;        /* Smooth text color transition */
+                background-color: transparent !important; /* Make tab background transparent */
+                color: #0073e6 !important;                /* Set text color */
+                border: none !important;                  /* Remove border */
+                border-radius: 0 !important;              /* No rounded corners */
+                padding: 10px 20px !important;            /* Padding for spacing */
+                font-size: 16px !important;               /* Font size */
+                font-weight: normal !important;           /* Normal font weight */
+                cursor: pointer !important;               /* Pointer cursor on hover */
+                transition: color 0.3s !important;        /* Smooth text color transition */
             }
             div[data-testid="stTabs"] button[data-baseweb="tab"]:hover {
-                color: #005bb5;                /* Change text color on hover */
+                color: #005bb5 !important;                /* Change text color on hover */
             }
             div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {
-                color: #005bb5;                /* Active tab text color */
-                font-weight: bold;             /* Bold text for active tab */
-                border-bottom: 3px solid #005bb5; /* Custom underline for active tab */
+                color: #005bb5 !important;                /* Active tab text color */
+                font-weight: bold !important;             /* Bold text for active tab */
+                border-bottom: 3px solid #005bb5 !important; /* Custom underline for active tab */
             }
             div[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"]:hover {
-                color: #003f7f;                /* Darker text color on hover for active tab */
+                color: #003f7f !important;                /* Darker text color on hover for active tab */
             }
 
             /* Completely remove Streamlit's default tab underline */
